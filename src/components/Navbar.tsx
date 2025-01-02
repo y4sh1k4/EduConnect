@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Users, Calendar, UserCircle, Menu, X } from 'lucide-react';
+import { Users, Calendar, UserCircle, Menu, X, Wallet } from 'lucide-react';
 import { NavLink } from './layout/NavLink';
+import { ConnectKitButton } from "connectkit";
 
 const navItems = [
   { to: "/connections", icon: <Users className="w-5 h-5" />, label: "Connections" },
@@ -12,13 +13,14 @@ const navItems = [
 export default function Navbar() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isWalletConnected, setIsWalletConnected] = useState(false);
 
   return (
     <nav className="sticky top-0 z-50 bg-[#262626]/80 border-b border-[#404040] backdrop-blur-xl shadow-lg">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2">
-            <div className="bg-[#1488FC] p-2 rounded-lg">
+          <Link to="/" className="flex items-center space-x-2 group">
+            <div className="bg-gradient-to-r from-[#1488FC] to-blue-500 p-2 rounded-lg transform group-hover:scale-110 transition-all">
               <Users className="w-6 h-6 text-white" />
             </div>
             <span className="text-xl font-bold bg-gradient-to-r from-[#1488FC] to-blue-400 text-transparent bg-clip-text">
@@ -27,7 +29,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex space-x-8">
+          <div className="hidden md:flex items-center space-x-8">
             {navItems.map((item) => (
               <NavLink
                 key={item.to}
@@ -35,6 +37,7 @@ export default function Navbar() {
                 active={location.pathname === item.to}
               />
             ))}
+            <ConnectKitButton />
           </div>
 
           {/* Mobile Menu Button */}
@@ -66,6 +69,17 @@ export default function Navbar() {
                 <span className="ml-2">{item.label}</span>
               </Link>
             ))}
+            <button
+              onClick={() => setIsWalletConnected(!isWalletConnected)}
+              className={`w-full px-4 py-3 rounded-lg font-semibold transition-colors inline-flex items-center gap-2 ${
+                isWalletConnected
+                ? 'bg-[#1488FC]/10 text-[#1488FC]'
+                : 'bg-gradient-to-r from-[#1488FC] to-blue-500 text-white'
+              }`}
+            >
+              <Wallet className="w-5 h-5" />
+              {isWalletConnected ? 'Connected' : 'Connect Wallet'}
+            </button>
           </div>
         </div>
       )}
