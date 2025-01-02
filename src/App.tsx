@@ -6,7 +6,6 @@ import ConnectionsPage from './pages/ConnectionsPage';
 import EventsPage from './pages/EventsPage';
 import ProfilePage from './pages/ProfilePage';
 import { Web3Provider } from './utils/Web3Provider';
-import { ConnectKitButton } from "connectkit";
 
 function App() {
   return (
