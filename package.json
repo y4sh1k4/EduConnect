@@ -11,11 +11,15 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.62.11",
+    "@xmtp/browser-sdk": "^0.0.11",
+    "@xmtp/xmtp-js": "^13.0.4",
     "connectkit": "^1.8.2",
     "lucide-react": "^0.344.0",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.2",
+    "util": "^0.12.5",
     "viem": "^2.22.1",
     "wagmi": "^2.14.6"
   },

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Users, Calendar, UserCircle, Menu, X, Wallet } from 'lucide-react';
 import { NavLink } from './layout/NavLink';
@@ -7,7 +7,8 @@ import { ConnectKitButton } from "connectkit";
 const navItems = [
   { to: "/connections", icon: <Users className="w-5 h-5" />, label: "Connections" },
   { to: "/events", icon: <Calendar className="w-5 h-5" />, label: "Events" },
-  { to: "/profile", icon: <UserCircle className="w-5 h-5" />, label: "Profile" }
+  { to: "/profile", icon: <UserCircle className="w-5 h-5" />, label: "Profile" },
+  { to: "/chat", icon: <UserCircle className="w-5 h-5" />, label: "Chat" }
 ];
 
 export default function Navbar() {

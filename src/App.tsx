@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import HomePage from './pages/HomePage';
@@ -6,7 +5,7 @@ import ConnectionsPage from './pages/ConnectionsPage';
 import EventsPage from './pages/EventsPage';
 import ProfilePage from './pages/ProfilePage';
 import { Web3Provider } from './utils/Web3Provider';
-import { ConnectKitButton } from "connectkit";
+import ChatPage from './pages/ChatPage';
 
 function App() {
   return (
@@ -20,6 +19,7 @@ function App() {
             <Route path="/connections" element={<ConnectionsPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/chat" element={<ChatPage />} />
           </Routes>
         </main>
       </div>
