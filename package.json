@@ -10,13 +10,25 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@tanstack/react-query": "^5.62.11",
+    "@xmtp/browser-sdk": "^0.0.11",
+    "@xmtp/xmtp-js": "^13.0.4",
+    "buffer": "^6.0.3",
     "connectkit": "^1.8.2",
+    "ethers": "^6.13.4",
     "lucide-react": "^0.344.0",
+    "pinata-web3": "^0.5.4",
+    "process": "^0.11.10",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.22.2",
+    "stream-browserify": "^3.0.0",
+    "util": "^0.12.5",
     "viem": "^2.22.1",
+    "vite-plugin-node-polyfills": "^0.22.0",
+    "vite-plugin-top-level-await": "^1.4.4",
+    "vite-plugin-wasm": "^3.4.1",
     "wagmi": "^2.14.6"
   },
   "devDependencies": {

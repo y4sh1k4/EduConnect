@@ -1,25 +1,69 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Upload, Plus, X } from 'lucide-react';
+import { PinataSDK } from "pinata-web3";
+import { useWriteContract } from 'wagmi'
+import { c_abi, c_address } from '../utils/Contractdetails';
+const pinata = new PinataSDK({
+  pinataJwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJmYmI2MzgxNS0yYjFlLTQ3NDAtOTQxNy0zYzkzNGE3ZGUyNjkiLCJlbWFpbCI6Im1laG5kaXJhdHRheWFzaGlrYTVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjMzMGUwNGNhMmJjZjA4OGViMjVkIiwic2NvcGVkS2V5U2VjcmV0IjoiMzgwMWU2NmRjZDc3NTkxM2YzZDc4YjZjZjUxMDBiMTY1M2E1ZWVhOWI1ZDVkODhiMzdkZWEyMDhlYzA1MmZkNyIsImV4cCI6MTc2NzUyODM2NH0.FxsaNl4ae9fYkQKIWiTG44aTDbXCYm9JNGnlYa2AR50",
+  pinataGateway: "http://jade-causal-mongoose-539.mypinata.cloud",
+});
 
 interface RegistrationFormProps {
   onComplete: () => void;
 }
 
-export default function RegistrationForm({ onComplete }: RegistrationFormProps) {
-  const [formData, setFormData] = useState({
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ onComplete }) => {
+  const { writeContract } = useWriteContract()
+  const [formData, setFormData] = React.useState({
     name: '',
     title: '',
     experience: '',
     description: '',
-    image: '',
+    image: null as File | null, // Changed to allow null initially
     techStack: [] as string[]
   });
-  const [newTech, setNewTech] = useState('');
+  const [newTech, setNewTech] = React.useState('');
+  const [image, setImage]= React.useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Image file handler
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setFormData(prev => ({
+        ...prev,
+        image: e.target.files[0] // Ensure only one file is set
+      }));
+    }
+  };
+
+  // Form submit handler
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Here you would typically send the data to your backend
+
+    if (!formData.image) {
+      console.error("No image selected");
+      return;
+    }
+    try {
+      const upload = await pinata.upload.file(formData.image);
+      console.log("Uploaded file:", upload);
+      setImage(upload.IpfsHash)
+    } catch (error) {
+      console.error("Error uploading file:", error);
+    }
+
     console.log('Form submitted:', formData);
+    writeContract({ 
+      abi:c_abi,
+      address: c_address,
+      functionName: 'createProfile',
+      args: [
+        formData.name,
+        image,
+        formData.title,
+        formData.techStack,
+        formData.description
+      ],
+   })
     onComplete();
   };
 
@@ -56,7 +100,12 @@ export default function RegistrationForm({ onComplete }: RegistrationFormProps) 
                   <Upload className="w-8 h-8 text-gray-400" />
                   <p className="text-sm text-gray-400 mt-2">Click to upload image</p>
                 </div>
-                <input type="file" className="hidden" accept="image/*" />
+                <input 
+                  type="file" 
+                  className="hidden" 
+                  accept="image/*" 
+                  onChange={handleImageChange} // Use updated handler
+                />
               </label>
             </div>
           </div>
@@ -152,4 +201,6 @@ export default function RegistrationForm({ onComplete }: RegistrationFormProps) 
       </form>
     </div>
   );
-}
+};
+
+export default RegistrationForm;
