@@ -12,16 +12,19 @@ const Chat = () => {
     const [user,setUser] = useState<PushAPI|null>(null);
     const recipientWalletAddress= "0x961FebC2c125f0d8Bd55dBA919b96E6aFeDFD79D";
     const {address } = useAccount();
-    const signMessage = async()=>{
+    const signMessage = async()=>{        
         const userAlice = await PushAPI.initialize(walletClient, {
             env: CONSTANTS.ENV.STAGING,
           });
           setUser(userAlice);
+          
           const stream = await userAlice.initStream([CONSTANTS.STREAM.CHAT])
           stream.on(CONSTANTS.STREAM.CHAT,(message)=>{
             console.log("message",message.message.content)
           })
           stream.connect();
+          const aliceChats = await userAlice.chat.list('CHATS');
+          console.log("ongoing chats",aliceChats);
     }
 
     const sendMessage = async () => {
@@ -32,7 +35,7 @@ const Chat = () => {
             });
             
             if (response?.messageObj) {
-                console.log("Message sent successfully:", response.messageObj   );
+                console.log("Message sent successfully:", response);
                 // Handle success (e.g., clear input, show success toast)
             }
         } catch (error) {
