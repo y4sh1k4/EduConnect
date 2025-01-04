@@ -6,6 +6,7 @@ import ConnectionsPage from './pages/ConnectionsPage';
 import EventsPage from './pages/EventsPage';
 import ProfilePage from './pages/ProfilePage';
 import { Web3Provider } from './utils/Web3Provider';
+import Chat from './pages/Chat';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <Route path="/connections" element={<ConnectionsPage />} />
             <Route path="/events" element={<EventsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/chat" element={<Chat />} />
           </Routes>
         </main>
       </div>
