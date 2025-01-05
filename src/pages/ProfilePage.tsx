@@ -34,7 +34,7 @@ console.log("img",user.ipfsProfilePicture)
       <div className="glass-card rounded-xl overflow-hidden">
         <div className="relative h-48 bg-[#1488FC]">
           <img
-            src={"https://jade-causal-mongoose-539.mypinata.cloud/ipfs/bafybeihh2boymdcu7fx5gfsr5r2434cvm3jnq6z3525azqylg4rvxnbdxq"}
+            src={user.ipfsProfilePicture}
             alt={user.fullName}
             className="absolute bottom-0 left-8 transform translate-y-1/2 w-32 h-32 rounded-full border-4 border-[#262626] object-cover"
           />
