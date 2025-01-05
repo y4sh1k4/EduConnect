@@ -8,6 +8,7 @@ import ProfilePage from './pages/ProfilePage';
 import { Web3Provider } from './utils/Web3Provider';
 import Chat from './pages/Chat';
 
+import FriendRequestsPage from './pages/FriendRequestsPage';
 
 function App() {
   return (
@@ -19,9 +20,11 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/connections" element={<ConnectionsPage />} />
+            <Route path="/requests" element={<FriendRequestsPage />}/> 
             <Route path="/events" element={<EventsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/chat" element={<Chat />} />
+            {/* <Route path="/chat" element={<ChatPage />} /> */}
           </Routes>
         </main>
       </div>

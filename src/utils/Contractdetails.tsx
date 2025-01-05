@@ -1,79 +1,5 @@
-export const c_address =  "0xa4469D636e79FA46C4E1d320c96E647db59E5a36";
-export const c_abi =  [
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "_from",
-				"type": "address"
-			}
-		],
-		"name": "acceptFriendRequest",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_name",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_description",
-				"type": "string"
-			},
-			{
-				"internalType": "uint256",
-				"name": "_date",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "_isHackathon",
-				"type": "bool"
-			}
-		],
-		"name": "createEvent",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_fullName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_ipfsProfilePicture",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_title",
-				"type": "string"
-			},
-			{
-				"internalType": "string[]",
-				"name": "_techStack",
-				"type": "string[]"
-			},
-			{
-				"internalType": "string",
-				"name": "_about",
-				"type": "string"
-			}
-		],
-		"name": "createProfile",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
+export const c_address= "0xa4469D636e79FA46C4E1d320c96E647db59E5a36";
+export const c_abi= [
 	{
 		"anonymous": false,
 		"inputs": [
@@ -160,11 +86,11 @@ export const c_abi =  [
 		"inputs": [
 			{
 				"internalType": "address",
-				"name": "_to",
+				"name": "_from",
 				"type": "address"
 			}
 		],
-		"name": "sendFriendRequest",
+		"name": "acceptFriendRequest",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -210,6 +136,67 @@ export const c_abi =  [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_name",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_description",
+				"type": "string"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_date",
+				"type": "uint256"
+			},
+			{
+				"internalType": "bool",
+				"name": "_isHackathon",
+				"type": "bool"
+			}
+		],
+		"name": "createEvent",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "string",
+				"name": "_fullName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_ipfsProfilePicture",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_title",
+				"type": "string"
+			},
+			{
+				"internalType": "string[]",
+				"name": "_techStack",
+				"type": "string[]"
+			},
+			{
+				"internalType": "string",
+				"name": "_about",
+				"type": "string"
+			}
+		],
+		"name": "createProfile",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -615,6 +602,19 @@ export const c_abi =  [
 			}
 		],
 		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "address",
+				"name": "_to",
+				"type": "address"
+			}
+		],
+		"name": "sendFriendRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
 		"type": "function"
 	}
 ]

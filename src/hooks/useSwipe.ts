@@ -13,7 +13,7 @@ interface UseSwipeProps {
 }
 
 // Reduced threshold for easier swipes
-const SWIPE_THRESHOLD = 20;
+const SWIPE_THRESHOLD = 10;
 const SAFE_VERTICAL_THRESHOLD = 50;
 // Added multiplier for smoother movement
 const MOVEMENT_MULTIPLIER = 1.5;

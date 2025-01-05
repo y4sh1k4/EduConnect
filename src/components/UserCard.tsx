@@ -1,15 +1,35 @@
-import React from 'react';
-import { User } from '../types';
-import { Code2, Briefcase, ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Code2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useSwipe } from '../hooks/useSwipe';
-
+import { useWriteContract } from 'wagmi';
+import { c_abi, c_address } from '../utils/Contractdetails';
+interface UserInterface {
+  about: string;
+  fullName: string;
+  ipfsProfilePicture: string;
+  techStack: string[];
+  title: string;
+  userAddress: string;
+}
 interface UserCardProps {
-  user: User;
+  user: UserInterface;
   onSwipe: (direction: 'left' | 'right') => void;
   isActive: boolean;
 }
 
 export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
+  const { writeContract } = useWriteContract()
+  
+  const handleSwipeComplete = async (direction: 'left' | 'right') => {
+    if (direction === 'right') {
+      try {
+        await sendFriendRequest(user.userAddress);
+      } catch (error) {
+        console.error('Failed to send friend request:', error);
+      }
+    }
+    onSwipe(direction);
+  };
+
   const {
     handleTouchStart,
     handleTouchMove,
@@ -17,12 +37,22 @@ export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
     translateX,
     isDragging,
   } = useSwipe({
-    onSwipeComplete: onSwipe,
+    onSwipeComplete: handleSwipeComplete,
     isActive,
   });
 
+  const sendFriendRequest = (id: string) => {
+    writeContract({ 
+      abi: c_abi,
+      address: c_address,
+      functionName: 'sendFriendRequest',
+      args: [id],
+    })
+  }
+
   const rotation = (translateX / 100) * 10;
   const opacity = Math.min(Math.abs(translateX) / 100, 1);
+  // const opacity = 1;
 
   return (
     <div 
@@ -60,18 +90,13 @@ export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
         )}
 
         <img
-          src={user.avatar}
-          alt={user.name}
+          src={user.ipfsProfilePicture}
+          alt={user.fullName}
           className="w-full h-48 sm:h-64 object-cover"
         />
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2 text-white">{user.name}</h2>
+          <h2 className="text-2xl font-bold mb-2 text-white">{user.fullName}</h2>
           <p className="text-gray-400 mb-4">{user.title}</p>
-          
-          <div className="flex items-center mb-4 text-gray-300">
-            <Briefcase className="w-5 h-5 mr-2 text-[#1488FC]" />
-            <span>{user.experience} years experience</span>
-          </div>
 
           <div className="mb-4">
             <div className="flex items-center mb-2">
@@ -90,7 +115,7 @@ export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
             </div>
           </div>
 
-          <p className="text-gray-400 mb-6">{user.bio}</p>
+          <p className="text-gray-400 mb-6">{user.about}</p>
 
           <div className="text-sm text-gray-500 text-center">
             Swipe right to connect, left to pass
