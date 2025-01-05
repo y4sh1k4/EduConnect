@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { PushAPI, CONSTANTS } from '@pushprotocol/restapi';
 import { useAccount, useWalletClient } from 'wagmi';
+import ChatSidebar from '../components/ChatSidebar';
 // import { c_abi, c_address } from '../utils/ContractDetails';
 
 interface Message {
@@ -9,7 +10,7 @@ interface Message {
     timestamp: number;
 }
 
-interface ChatUser {
+export interface ChatUser {
     did: string;
     walletAddress?: string;
     lastMessage?: string;
@@ -95,20 +96,9 @@ const Chat = () => {
                 <div className="p-4 border-b border-gray-700">
                     <h2 className="text-xl font-bold text-white">Chats</h2>
                 </div>
-                <div className="overflow-y-auto h-[calc(100vh-4rem)]">
+                <div className="overflow-y-auto h-[calc(100vh-4rem)] flex flex-col items-center ">
                     {chatList.map((chat) => (
-                        <div
-                            key={chat.did}
-                            onClick={() => setSelectedChat(chat.did?chat.did.slice(7,):'0x...')}
-                            className={`p-4 cursor-pointer hover:bg-gray-700 transition-colors ${
-                                selectedChat === chat.did.slice(7,) ? 'bg-gray-700' : ''
-                            }`}
-                        >
-                            <div className="text-white">{chat.did?chat.did.slice(7, 21):'0x...'}.....</div>
-                            {chat.lastMessage && (
-                                <div className="text-gray-400 text-sm truncate">{chat.lastMessage}</div>
-                            )}
-                        </div>
+                        <ChatSidebar chat={chat} selectedChat={selectedChat} setSelectedChat={setSelectedChat}/>
                     ))}
                 </div>
             </div>
