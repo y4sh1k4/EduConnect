@@ -23,7 +23,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onComplete }) => {
     techStack: [] as string[]
   });
   const [newTech, setNewTech] = React.useState('');
-  const [image, setImage]= React.useState("");
+  const [Image, setImage]= React.useState("");
 
   // Image file handler
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,23 +47,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onComplete }) => {
       const upload = await pinata.upload.file(formData.image);
       console.log("Uploaded file:", upload);
       setImage(upload.IpfsHash)
+      console.log("ipsfs",upload.IpfsHash)
+      console.log("ipfs",Image)
+      writeContract({ 
+        abi:c_abi,
+        address: c_address,
+        functionName: 'createProfile',
+        args: [
+          formData.name,
+          "http://jade-causal-mongoose-539.mypinata.cloud/ipfs/"+upload.IpfsHash,
+          formData.title,
+          formData.techStack,
+          formData.description
+        ],
+     })
     } catch (error) {
       console.error("Error uploading file:", error);
     }
 
     console.log('Form submitted:', formData);
-    writeContract({ 
-      abi:c_abi,
-      address: c_address,
-      functionName: 'createProfile',
-      args: [
-        formData.name,
-        image,
-        formData.title,
-        formData.techStack,
-        formData.description
-      ],
-   })
+    
     onComplete();
   };
 

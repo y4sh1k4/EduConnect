@@ -1,7 +1,7 @@
 "use client"
 import { WagmiProvider, createConfig, http } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ConnectKitProvider, getDefaultConfig } from "connectkit";
+import { ConnectKitProvider} from "connectkit";
 import { ReactNode } from "react";
 import { defineChain } from 'viem'
 
@@ -11,15 +11,15 @@ const openCampus = defineChain({
   name: 'Open Campus Codex Sepolia',
   nativeCurrency: { 
     name: 'Open Campus Codex Sepolia', 
-    symbol: 'OP', 
+    symbol: 'EDU', 
     decimals: 18
   },
   rpcUrls: {
     default: { 
-      http: ['https://lb.drpc.org/ogrpc?network=open-campus-codex-sepolia&dkey=AvdUpBeMqkYSjPsYOd4pkGLjqR4BynsR77KAIlZWwHzR'] 
+      http: ['https://open-campus-codex-sepolia.drpc.org'] 
     },
     public: {
-      http: ['https://lb.drpc.org/ogrpc?network=open-campus-codex-sepolia&dkey=AvdUpBeMqkYSjPsYOd4pkGLjqR4BynsR77KAIlZWwHzR']
+      http: ['https://open-campus-codex-sepolia.drpc.org']
     }
   },
   blockExplorers: {
@@ -38,17 +38,12 @@ const openCampus = defineChain({
 });
 
 const config = createConfig(
-  getDefaultConfig({
+  {
     chains: [openCampus],
     transports: {
-      [openCampus.id]: http('https://lb.drpc.org/ogrpc?network=open-campus-codex-sepolia&dkey=AvdUpBeMqkYSjPsYOd4pkGLjqR4BynsR77KAIlZWwHzR')
-    },
-    walletConnectProjectId: '6f874c8f7977f91d15dc079c51a4fe87',
-    appName: "EduConnect",
-    appDescription: "Your App Description",
-    appUrl: "https://family.co",
-    appIcon: "https://family.co/logo.png",
-  }),
+      [openCampus.id]: http('https://open-campus-codex-sepolia.drpc.org')
+    }
+  },
 );
 
 const queryClient = new QueryClient();

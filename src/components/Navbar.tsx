@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Users, Calendar, UserCircle, Menu, X, Wallet } from 'lucide-react';
+import { Users, Calendar, UserCircle, Menu, X, Wallet, UserPlus } from 'lucide-react';
 import { NavLink } from './layout/NavLink';
 import { ConnectKitButton } from "connectkit";
 
 const navItems = [
   { to: "/connections", icon: <Users className="w-5 h-5" />, label: "Connections" },
+  { to: "/requests", icon: <UserPlus className="w-5 h-5" />, label: "Requests" },
   { to: "/events", icon: <Calendar className="w-5 h-5" />, label: "Events" },
   { to: "/profile", icon: <UserCircle className="w-5 h-5" />, label: "Profile" }
 ];
