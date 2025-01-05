@@ -1,64 +1,174 @@
 import { useEffect, useState } from 'react'
-// Import restapi for function calls
-// Import socket for listening for real time messages
 import { PushAPI, CONSTANTS } from '@pushprotocol/restapi';
-
-// Ethers or Viem, both are supported
-// import { ethers } from 'ethers';
 import { useAccount, useWalletClient } from 'wagmi';
+// import { c_abi, c_address } from '../utils/ContractDetails';
+
+interface Message {
+    messageContent: string;
+    fromDID: string;
+    timestamp: number;
+}
+
+interface ChatUser {
+    did: string;
+    walletAddress?: string;
+    lastMessage?: string;
+}
 
 const Chat = () => {
-    const {data:walletClient} = useWalletClient();
-    const [user,setUser] = useState<PushAPI|null>(null);
-    const recipientWalletAddress= "0x961FebC2c125f0d8Bd55dBA919b96E6aFeDFD79D";
-    const {address } = useAccount();
-    const signMessage = async()=>{        
+    const { data: walletClient } = useWalletClient();
+    const [user, setUser] = useState<PushAPI | null>(null);
+    const [messages, setMessages] = useState<Message[]>([]);
+    const [newMessage, setNewMessage] = useState('');
+    const [chatList, setChatList] = useState<ChatUser[]>([]);
+    const [selectedChat, setSelectedChat] = useState<string | null>(null);
+    const { address } = useAccount();
+
+    // Load chat list
+    const signMessage = async()=>{
         const userAlice = await PushAPI.initialize(walletClient, {
             env: CONSTANTS.ENV.STAGING,
           });
           setUser(userAlice);
-          
           const stream = await userAlice.initStream([CONSTANTS.STREAM.CHAT])
           stream.on(CONSTANTS.STREAM.CHAT,(message)=>{
             console.log("message",message.message.content)
           })
           stream.connect();
           const aliceChats = await userAlice.chat.list('CHATS');
-          console.log("ongoing chats",aliceChats);
+          setChatList(aliceChats);
+          setSelectedChat(aliceChats[0].did.slice(7,));
+          const chats = await userAlice.chat.history(selectedChat?selectedChat:aliceChats[0].did.slice(7,));
+          console.log("history of messages",chats);
+          setMessages(chats.reverse());
     }
+
+    useEffect(()=>{
+        const loadChats = async ()=>{
+            const chats:Message[] = await user?.chat.history(selectedChat?selectedChat:"") as Message[];
+            console.log("history of messages",chats);
+            setMessages(chats.reverse());
+        }
+        loadChats();
+    },[selectedChat])
 
     const sendMessage = async () => {
         try {
-            const response = await user?.chat.send(recipientWalletAddress, {
-                content: 'Hello',
+            if(!user){
+                console.log("User not available");
+            }
+            const response = await user?.chat.send(selectedChat?selectedChat:'', {
+                content: newMessage,
                 type: 'Text'
             });
             
             if (response?.messageObj) {
-                console.log("Message sent successfully:", response);
-                // Handle success (e.g., clear input, show success toast)
+                setMessages(prev => [...prev, {
+                    messageContent:newMessage,
+                    timestamp:response.timestamp,
+                    fromDID:response.fromDID
+                } as Message]);
+                setNewMessage(''); // Clear input after sending
             }
         } catch (error) {
             console.error("Failed to send message:", error);
-            // Handle error (e.g., show error toast)
         }
     }
-    useEffect(()=>{
-        const initializePushProtocol = ()=>{
-             signMessage();
-        }
-        if(!user && address){
-            initializePushProtocol();
-        }
-    })
-     
+
+    // Load chat history
+    useEffect(() => {
+        const loadChats = async () => {
+            if(user==null){
+                await signMessage();  
+            }
+        };
+        loadChats();
+    });
     
-  return (
-    <>
-    <div>Chat</div>
-    <button onClick={sendMessage} className='bg-blue-500 rounded-lg px-4 py-2'>Send Message</button>
-    </>
-  )
+    return (
+        <div className="flex h-screen bg-gray-900">
+            {/* Sidebar */}
+            <div className="w-80 border-r border-gray-700 bg-gray-800">
+                <div className="p-4 border-b border-gray-700">
+                    <h2 className="text-xl font-bold text-white">Chats</h2>
+                </div>
+                <div className="overflow-y-auto h-[calc(100vh-4rem)]">
+                    {chatList.map((chat) => (
+                        <div
+                            key={chat.did}
+                            onClick={() => setSelectedChat(chat.did?chat.did.slice(7,):'0x...')}
+                            className={`p-4 cursor-pointer hover:bg-gray-700 transition-colors ${
+                                selectedChat === chat.did.slice(7,) ? 'bg-gray-700' : ''
+                            }`}
+                        >
+                            <div className="text-white">{chat.did?chat.did.slice(7, 21):'0x...'}.....</div>
+                            {chat.lastMessage && (
+                                <div className="text-gray-400 text-sm truncate">{chat.lastMessage}</div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            {/* Chat Area */}
+            <div className="flex-1 flex flex-col">
+                {selectedChat ? (
+                    <>
+                        {/* Chat Header */}
+                        <div className="bg-gray-800 p-4 border-b border-gray-700">
+                            <h2 className="text-xl font-bold text-white">
+                                Chat with {selectedChat.slice(0, 6)}...{selectedChat.slice(-4)}
+                            </h2>
+                        </div>
+
+                        {/* Messages Container */}
+                        <div className="flex-1 overflow-y-auto p-4 bg-gray-900 space-y-4">
+                            {messages&&messages.map((msg, index) => (
+                                <div key={index} 
+                                     className={`flex ${msg.fromDID.slice(7,) === address ? 'justify-end' : 'justify-start'} relative`}>
+                                    <div className={`max-w-[70%] flex flex-col p-3 rounded-lg ${
+                                        msg.fromDID.slice(7,) === address 
+                                        ? 'bg-blue-600 text-white rounded-br-none ' 
+                                        : 'bg-gray-700 text-white rounded-bl-none relative left-0 mb-2'
+                                    }`}>
+                                        <p>{msg.messageContent}</p>
+                                        <p className="text-xs mt-1 opacity-70">
+                                            {new Date(msg.timestamp).toLocaleTimeString()}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Message Input */}
+                        <div className="bg-gray-800 p-4 border-t border-gray-700">
+                            <div className="flex gap-2">
+                                <input
+                                    type="text"
+                                    value={newMessage}
+                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    placeholder="Type a message..."
+                                    className="flex-1 p-2 rounded-lg bg-gray-700 text-white border-none focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
+                                />
+                                <button 
+                                    onClick={sendMessage}
+                                    className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50"
+                                    disabled={!newMessage.trim()}
+                                >
+                                    Send
+                                </button>
+                            </div>
+                        </div>
+                    </>
+                ) : (
+                    <div className="flex-1 flex items-center justify-center bg-gray-900 text-gray-400">
+                        Select a chat to start messaging
+                    </div>
+                )}
+            </div>
+        </div>
+    );
 }
 
-export default Chat
+export default Chat;
