@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Plus, Users, Calendar, User, DollarSign } from 'lucide-react';
-import { c_abi,c_address } from '../utils/Contractdetails';
+import { c_abi,c_address } from '../utils/ContractDetails';
 import { useAccount, useReadContract,useWriteContract } from 'wagmi';
 import { Link } from 'react-router-dom';
 interface Event {
