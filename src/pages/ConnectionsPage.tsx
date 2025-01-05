@@ -33,7 +33,7 @@ export default function ConnectionsPage() {
     // Since userAddress is the unique identifier in your data structure
     handleConnection(currentUser.userAddress, direction === 'right');
     
-    if (currentIndex < users.length - 1) {
+    if (currentIndex < users.length) {
       setCurrentIndex(prev => prev + 1);
     }
   };
