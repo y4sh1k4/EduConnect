@@ -3,20 +3,29 @@ import { useNavigate } from 'react-router-dom';
 import { Wallet, Code2, Users, Brain, ArrowRight } from 'lucide-react';
 import RegistrationForm from '../components/RegistrationForm';
 import { ConnectKitButton } from "connectkit";
-import { useAccount } from "wagmi";
+import { useAccount, useWalletClient } from "wagmi";
+import { CONSTANTS } from '@pushprotocol/restapi';
+import { PushAPI } from '@pushprotocol/restapi';
 export default function HomePage() {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [showRegistration, setShowRegistration] = useState(false);
   const navigate = useNavigate();
   const { address} = useAccount();
-
+  const {data:walletClient} = useWalletClient();
+  const signMessage = async()=>{
+     await PushAPI.initialize(walletClient, {
+      env: CONSTANTS.ENV.STAGING,
+  });
+  }
+  if(walletClient){
+      signMessage();
+  }
   const handleWalletConnect = () => {
     setIsWalletConnected(true);
   };
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
-      {!showRegistration ? (
         <div className="relative">
           {/* Animated Background */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -80,7 +89,7 @@ export default function HomePage() {
                 </div>
               ) : (
                 <button
-                  onClick={() => setShowRegistration(true)}
+                  onClick={() => navigate("/register")}
                   className="px-8 py-4 bg-gradient-to-r from-[#1488FC] to-blue-500 rounded-lg font-semibold hover:from-[#1488FC]/90 hover:to-blue-500/90 transition-all transform hover:scale-105 inline-flex items-center gap-2 shadow-lg shadow-[#1488FC]/20"
                 >
                   Get Started <ArrowRight className="w-5 h-5" />
@@ -104,9 +113,6 @@ export default function HomePage() {
             </div>
           </div>
         </div>
-      ) : (
-        <RegistrationForm onComplete={() => navigate('/profile')} />
-      )}
     </div>
   );
 }

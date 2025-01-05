@@ -9,10 +9,13 @@ import { Web3Provider } from './utils/Web3Provider';
 import Chat from './pages/Chat';
 
 import FriendRequestsPage from './pages/FriendRequestsPage';
+import { PushProtocolProvider } from './context/PushProtocolContext';
+import RegistrationPage from './pages/RegistrationPage';
 
 function App() {
   return (
     <Web3Provider>
+    <PushProtocolProvider>
     <Router>
       <div className="min-h-screen bg-[#0A0A0A]">
         <Navbar />
@@ -24,11 +27,13 @@ function App() {
             <Route path="/events" element={<EventsPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/chat" element={<Chat />} />
+            <Route path="/register" element={<RegistrationPage />} />
             {/* <Route path="/chat" element={<ChatPage />} /> */}
           </Routes>
         </main>
       </div>
     </Router>
+    </PushProtocolProvider>
     </Web3Provider>
   );
 }

@@ -2,6 +2,7 @@ import { Code2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useSwipe } from '../hooks/useSwipe';
 import { useWriteContract } from 'wagmi';
 import { c_abi, c_address } from '../utils/Contractdetails';
+import { usePushProtocol } from '../hooks/usePushProtocol';
 interface UserInterface {
   about: string;
   fullName: string;
@@ -18,7 +19,7 @@ interface UserCardProps {
 
 export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
   const { writeContract } = useWriteContract()
-  
+  const { sendChatRequest } = usePushProtocol();
   const handleSwipeComplete = async (direction: 'left' | 'right') => {
     if (direction === 'right') {
       try {
@@ -48,6 +49,7 @@ export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
       functionName: 'sendFriendRequest',
       args: [id],
     })
+    sendChatRequest(id)
   }
 
   const rotation = (translateX / 100) * 10;

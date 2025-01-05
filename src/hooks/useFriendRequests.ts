@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { usePushProtocol } from './usePushProtocol';
 
 interface userInterface{
     about: string,
@@ -32,14 +33,16 @@ interface userInterface{
 
 export function useFriendRequests(mockRequests:userInterface[]) {
   const [requests, setRequests] = useState<userInterface[]>(mockRequests);
-
+  const { acceptChatRequest, rejectChatRequest } = usePushProtocol();
   const handleAccept = (id: string) => {
     setRequests(prev => prev.filter(request => request.userAddress !== id));
+    acceptChatRequest(id);
     // Here you would typically make an API call to accept the request
   };
 
   const handleReject = (id: string) => {
     setRequests(prev => prev.filter(request => request.userAddress !== id));
+    rejectChatRequest(id);
     // Here you would typically make an API call to reject the request
   };
 

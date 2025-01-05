@@ -28,19 +28,22 @@ const Chat = () => {
     const signMessage = async()=>{
         const userAlice = await PushAPI.initialize(walletClient, {
             env: CONSTANTS.ENV.STAGING,
-          });
-          setUser(userAlice);
-          const stream = await userAlice.initStream([CONSTANTS.STREAM.CHAT])
-          stream.on(CONSTANTS.STREAM.CHAT,(message)=>{
+        });
+        setUser(userAlice);
+        const stream = await userAlice.initStream([CONSTANTS.STREAM.CHAT])
+        stream.on(CONSTANTS.STREAM.CHAT,(message)=>{
             console.log("message",message.message.content)
-          })
-          stream.connect();
-          const aliceChats = await userAlice.chat.list('CHATS');
-          setChatList(aliceChats);
-          setSelectedChat(aliceChats[0].did.slice(7,));
-          const chats = await userAlice.chat.history(selectedChat?selectedChat:aliceChats[0].did.slice(7,));
-          console.log("history of messages",chats);
-          setMessages(chats.reverse());
+        })
+        stream.connect();
+        const aliceChats = await userAlice.chat.list('CHATS');
+        console.log("chat list",aliceChats);
+        setChatList(aliceChats);
+        setSelectedChat(aliceChats[0].did.slice(7,));
+        const accepted = await userAlice.chat.accept("0x09D9a6EdfE066fc24F46bA8C2b21736468f2967D");
+        console.log(accepted);
+        const chats = await userAlice.chat.history(selectedChat?selectedChat:aliceChats[0].did.slice(7,));
+        console.log("history of messages",chats);
+        setMessages(chats.reverse());
     }
 
     useEffect(()=>{

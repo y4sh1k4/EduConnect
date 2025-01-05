@@ -2,7 +2,7 @@ import React from 'react';
 import { Upload, Plus, X } from 'lucide-react';
 import { PinataSDK } from "pinata-web3";
 import { useWriteContract } from 'wagmi'
-import { c_abi, c_address } from '../utils/Contractdetails';
+import { c_abi, c_address } from '../utils/ContractDetails';
 const pinata = new PinataSDK({
   pinataJwt: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySW5mb3JtYXRpb24iOnsiaWQiOiJmYmI2MzgxNS0yYjFlLTQ3NDAtOTQxNy0zYzkzNGE3ZGUyNjkiLCJlbWFpbCI6Im1laG5kaXJhdHRheWFzaGlrYTVAZ21haWwuY29tIiwiZW1haWxfdmVyaWZpZWQiOnRydWUsInBpbl9wb2xpY3kiOnsicmVnaW9ucyI6W3siZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiRlJBMSJ9LHsiZGVzaXJlZFJlcGxpY2F0aW9uQ291bnQiOjEsImlkIjoiTllDMSJ9XSwidmVyc2lvbiI6MX0sIm1mYV9lbmFibGVkIjpmYWxzZSwic3RhdHVzIjoiQUNUSVZFIn0sImF1dGhlbnRpY2F0aW9uVHlwZSI6InNjb3BlZEtleSIsInNjb3BlZEtleUtleSI6IjMzMGUwNGNhMmJjZjA4OGViMjVkIiwic2NvcGVkS2V5U2VjcmV0IjoiMzgwMWU2NmRjZDc3NTkxM2YzZDc4YjZjZjUxMDBiMTY1M2E1ZWVhOWI1ZDVkODhiMzdkZWEyMDhlYzA1MmZkNyIsImV4cCI6MTc2NzUyODM2NH0.FxsaNl4ae9fYkQKIWiTG44aTDbXCYm9JNGnlYa2AR50",
   pinataGateway: "http://jade-causal-mongoose-539.mypinata.cloud",
@@ -97,12 +97,20 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onComplete }) => {
         <div className="glass-card p-6 rounded-xl space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">Profile Image</label>
-            <div className="flex items-center justify-center w-full">
+            <div className="flex items-center justify-center w-full relative">
+            {formData.image ?
+            <> 
+                  <img src={URL.createObjectURL(formData.image)} alt="image" className='w-50 h-52' />
+                  <button className='text-white border-white rounded-full px-2 absolute top-0 right-52 border' onClick={()=>setFormData((prev)=>({...prev,image:null}))}>x</button>
+            </>
+              :
+              <>
               <label className="w-full h-32 border-2 border-dashed border-gray-600 rounded-lg cursor-pointer hover:border-[#1488FC]/50 transition-colors">
                 <div className="flex flex-col items-center justify-center pt-6">
                   <Upload className="w-8 h-8 text-gray-400" />
                   <p className="text-sm text-gray-400 mt-2">Click to upload image</p>
                 </div>
+                
                 <input 
                   type="file" 
                   className="hidden" 
@@ -110,6 +118,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onComplete }) => {
                   onChange={handleImageChange} // Use updated handler
                 />
               </label>
+              </>
+            }
             </div>
           </div>
 
