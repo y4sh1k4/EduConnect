@@ -1,6 +1,6 @@
 import { Mail, Github, Linkedin, Code2 } from 'lucide-react';
 import { useAccount, useReadContract } from 'wagmi';
-import { c_abi,c_address} from '../utils/Contractdetails';
+import { c_abi,c_address} from '../utils/ContractDetails';
 interface userInterface{
   about: string,
   fullName: string,
