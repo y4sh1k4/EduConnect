@@ -1,0 +1,3 @@
+[submodule "EduconnectContract"]
+	path = EduconnectContract
+	url = https://github.com/sh4d0wy/EduconnectContract
