@@ -6,7 +6,6 @@ import ConnectionsPage from './pages/ConnectionsPage';
 import EventsPage from './pages/EventsPage';
 import ProfilePage from './pages/ProfilePage';
 import { Web3Provider } from './utils/Web3Provider';
-import ChatPage from './pages/ChatPage';
 import FriendRequestsPage from './pages/FriendRequestsPage';
 
 function App() {

@@ -1,11 +1,17 @@
-import { User } from '../types';
 import { Code2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useSwipe } from '../hooks/useSwipe';
 import { useWriteContract } from 'wagmi';
 import { c_abi, c_address } from '../utils/Contractdetails';
-
+interface UserInterface {
+  about: string;
+  fullName: string;
+  ipfsProfilePicture: string;
+  techStack: string[];
+  title: string;
+  userAddress: string;
+}
 interface UserCardProps {
-  user: User;
+  user: UserInterface;
   onSwipe: (direction: 'left' | 'right') => void;
   isActive: boolean;
 }
@@ -84,7 +90,7 @@ export default function UserCard({ user, onSwipe, isActive }: UserCardProps) {
 
         <img
           src={user.ipfsProfilePicture}
-          alt={user.name}
+          alt={user.fullName}
           className="w-full h-48 sm:h-64 object-cover"
         />
         <div className="p-6">
