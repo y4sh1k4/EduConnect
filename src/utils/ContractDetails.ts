@@ -1,5 +1,5 @@
-export const c_address =  "0xa4469D636e79FA46C4E1d320c96E647db59E5a36";
-export const c_abi =  [
+export const c_address= "0x4F077F51CAe39F8bA76B7901D3C113f1ee0cad70";
+export const c_abi= [
 	{
 		"inputs": [
 			{
@@ -21,24 +21,39 @@ export const c_abi =  [
 				"type": "string"
 			},
 			{
+				"internalType": "uint256",
+				"name": "_fromDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_toDate",
+				"type": "uint256"
+			},
+			{
 				"internalType": "string",
 				"name": "_description",
 				"type": "string"
 			},
 			{
-				"internalType": "uint256",
-				"name": "_date",
-				"type": "uint256"
-			},
-			{
 				"internalType": "bool",
 				"name": "_isHackathon",
 				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "_eventFee",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_organizer",
+				"type": "address"
 			}
 		],
 		"name": "createEvent",
 		"outputs": [],
-		"stateMutability": "nonpayable",
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -73,6 +88,11 @@ export const c_abi =  [
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
+	},
+	{
+		"inputs": [],
+		"stateMutability": "nonpayable",
+		"type": "constructor"
 	},
 	{
 		"anonymous": false,
@@ -142,6 +162,25 @@ export const c_abi =  [
 		"inputs": [
 			{
 				"indexed": true,
+				"internalType": "uint256",
+				"name": "eventId",
+				"type": "uint256"
+			},
+			{
+				"indexed": true,
+				"internalType": "address",
+				"name": "participant",
+				"type": "address"
+			}
+		],
+		"name": "ParticipantRegistered",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": true,
 				"internalType": "address",
 				"name": "user",
 				"type": "address"
@@ -159,12 +198,38 @@ export const c_abi =  [
 	{
 		"inputs": [
 			{
+				"internalType": "uint256",
+				"name": "_eventId",
+				"type": "uint256"
+			}
+		],
+		"name": "registerEvent",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "address",
 				"name": "_to",
 				"type": "address"
 			}
 		],
 		"name": "sendFriendRequest",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_newFee",
+				"type": "uint256"
+			}
+		],
+		"name": "setOrganizerFee",
 		"outputs": [],
 		"stateMutability": "nonpayable",
 		"type": "function"
@@ -234,7 +299,12 @@ export const c_abi =  [
 			},
 			{
 				"internalType": "uint256",
-				"name": "date",
+				"name": "fromDate",
+				"type": "uint256"
+			},
+			{
+				"internalType": "uint256",
+				"name": "toDate",
 				"type": "uint256"
 			},
 			{
@@ -246,6 +316,11 @@ export const c_abi =  [
 				"internalType": "bool",
 				"name": "isHackathon",
 				"type": "bool"
+			},
+			{
+				"internalType": "uint256",
+				"name": "eventFee",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",
@@ -334,6 +409,25 @@ export const c_abi =  [
 		"type": "function"
 	},
 	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_eventId",
+				"type": "uint256"
+			}
+		],
+		"name": "getEventParticipants",
+		"outputs": [
+			{
+				"internalType": "address[]",
+				"name": "",
+				"type": "address[]"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"inputs": [],
 		"name": "getEvents",
 		"outputs": [
@@ -351,7 +445,12 @@ export const c_abi =  [
 					},
 					{
 						"internalType": "uint256",
-						"name": "date",
+						"name": "fromDate",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "toDate",
 						"type": "uint256"
 					},
 					{
@@ -363,9 +462,19 @@ export const c_abi =  [
 						"internalType": "bool",
 						"name": "isHackathon",
 						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eventFee",
+						"type": "uint256"
+					},
+					{
+						"internalType": "uint256",
+						"name": "eventId",
+						"type": "uint256"
 					}
 				],
-				"internalType": "struct EduConnect.Event[]",
+				"internalType": "struct EduConnect.EventView[]",
 				"name": "",
 				"type": "tuple[]"
 			}
@@ -578,6 +687,43 @@ export const c_abi =  [
 				"internalType": "bool",
 				"name": "",
 				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_eventId",
+				"type": "uint256"
+			},
+			{
+				"internalType": "address",
+				"name": "_user",
+				"type": "address"
+			}
+		],
+		"name": "isRegisteredForEvent",
+		"outputs": [
+			{
+				"internalType": "bool",
+				"name": "",
+				"type": "bool"
+			}
+		],
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "organizerFee",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
 			}
 		],
 		"stateMutability": "view",

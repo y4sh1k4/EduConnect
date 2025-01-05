@@ -1,7 +1,7 @@
 import { Check, X, UserPlus, MessageCircle, Users } from 'lucide-react';
 import { useFriendRequests } from '../hooks/useFriendRequests';
 import { useAccount, useReadContract, useWriteContract } from 'wagmi';
-import { c_abi, c_address } from '../utils/Contractdetails';
+import { c_abi, c_address } from '../utils/ContractDetails';
 import { useState } from 'react';
 import FriendsTab from '../components/FriendsTab';
 import { usePushProtocol } from '../hooks/usePushProtocol';

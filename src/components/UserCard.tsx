@@ -1,7 +1,7 @@
 import { Code2, ThumbsUp, ThumbsDown } from 'lucide-react';
 import { useSwipe } from '../hooks/useSwipe';
 import { useWriteContract } from 'wagmi';
-import { c_abi, c_address } from '../utils/Contractdetails';
+import { c_abi, c_address } from '../utils/ContractDetails';
 import { usePushProtocol } from '../hooks/usePushProtocol';
 interface UserInterface {
   about: string;

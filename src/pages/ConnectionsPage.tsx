@@ -3,7 +3,7 @@ import UserCard from '../components/UserCard';
 import TechStackFilter from '../components/TechStackFilter';
 import { useConnections } from '../hooks/useConnections';
 import { useReadContract,useAccount } from 'wagmi';
-import { c_abi, c_address } from '../utils/Contractdetails';
+import { c_abi, c_address } from '../utils/ContractDetails';
 
 interface UserInterface {
   about: string;

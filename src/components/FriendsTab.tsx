@@ -1,6 +1,6 @@
 import React from 'react'
 import { useReadContract } from 'wagmi'
-import { c_abi, c_address } from '../utils/Contractdetails'
+import { c_abi, c_address } from '../utils/ContractDetails'
 import { UserInterface } from '../pages/FriendRequestsPage'
 import { useNavigate } from 'react-router-dom'
 import { MessageCircle } from 'lucide-react'
